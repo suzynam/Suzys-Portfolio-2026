@@ -672,6 +672,14 @@ p {
   align-items: start;
 }
 
+.notion-column-list[data-columns="2"] {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.notion-column-list[data-columns="3"] {
+  grid-template-columns: repeat(3, 1fr);
+}
+
 .notion-column {
   display: flex;
   flex-direction: column;
@@ -681,11 +689,100 @@ p {
 .notion-column img {
   margin: 0 !important;
   width: 100%;
+  border-radius: 8px;
+}
+
+/* Notion Tables */
+.notion-table-wrapper {
+  overflow-x: auto;
+  margin: 32px 0;
+}
+
+.notion-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.notion-table th,
+.notion-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.notion-table th {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.notion-table td {
+  color: var(--text-primary);
+}
+
+.notion-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Notion Callouts */
+.notion-callout {
+  display: flex;
+  gap: 12px;
+  padding: 20px;
+  margin: 24px 0;
+  background: rgba(135, 131, 255, 0.1);
+  border-radius: 12px;
+  border-left: 3px solid rgba(135, 131, 255, 0.5);
+}
+
+.notion-callout .callout-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.notion-callout .callout-content {
+  flex: 1;
+}
+
+.notion-callout p:last-child {
+  margin-bottom: 0;
+}
+
+/* Heading Number Styling */
+.markdown-content h1::before,
+.markdown-content h2::before,
+.markdown-content h3::before {
+  color: var(--text-secondary);
+  opacity: 0.5;
+  margin-right: 0.5em;
 }
 
 @media (max-width: 768px) {
   .notion-column-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     gap: 40px;
+  }
+
+  .notion-table-wrapper {
+    margin: 24px -20px;
+  }
+
+  .notion-table {
+    font-size: 0.85rem;
+  }
+
+  .notion-table th,
+  .notion-table td {
+    padding: 10px 12px;
+  }
+
+  .speaking-stats {
+    flex-direction: column;
+    gap: 3rem;
+    padding: 2rem;
   }
 }

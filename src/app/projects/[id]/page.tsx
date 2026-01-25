@@ -28,12 +28,38 @@ async function getProjectData(id: string): Promise<ProjectDetail | null> {
         });
         const n2m = new NotionToMarkdown({ notionClient: notion });
 
-        // Add custom transformers for multi-column layout
+        // Add custom transformers for better visual fidelity
+
+        // Multi-column layout
         n2m.setCustomTransformer('column_list', async (block: any) => {
-            return `<div class="notion-column-list">`;
+            const columnCount = block.column_list?.children?.length || 2;
+            return `<div class="notion-column-list" data-columns="${columnCount}">`;
         });
+
         n2m.setCustomTransformer('column', async (block: any) => {
             return `<div class="notion-column">`;
+        });
+
+        // Tables
+        n2m.setCustomTransformer('table', async (block: any) => {
+            return `<div class="notion-table-wrapper"><table class="notion-table">`;
+        });
+
+        n2m.setCustomTransformer('table_row', async (block: any) => {
+            const cells = block.table_row?.cells || [];
+            const isHeader = block.has_column_header;
+            const tag = isHeader ? 'th' : 'td';
+            const cellsHtml = cells.map((cell: any[]) => {
+                const text = cell.map((c: any) => c.plain_text || '').join('');
+                return `<${tag}>${text}</${tag}>`;
+            }).join('');
+            return `<tr>${cellsHtml}</tr>`;
+        });
+
+        // Callouts (for styled boxes)
+        n2m.setCustomTransformer('callout', async (block: any) => {
+            const emoji = block.callout?.icon?.emoji || '';
+            return `<div class="notion-callout"><span class="callout-icon">${emoji}</span><div class="callout-content">`;
         });
 
         // Get Page Metadata
@@ -97,8 +123,9 @@ async function getProjectData(id: string): Promise<ProjectDetail | null> {
             date,
             coverImage,
             properties: processedProperties,
-            content: content.replace(/<div class="notion-column"><\/div>/g, '</div>')
-                .replace(/<div class="notion-column-list"><\/div>/g, '</div>')
+            content: content
+                .replace(/<div class="notion-column"><\/div>/g, '</div>')
+                .replace(/<div class="notion-column-list"[^>]*><\/div>/g, '</div>')
         };
     } catch (error: any) {
         console.error('Failed to fetch project:', error);
