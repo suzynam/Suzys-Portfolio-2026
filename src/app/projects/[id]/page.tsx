@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 interface ProjectDetail {
     id: string;
@@ -102,7 +103,10 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                     )}
 
                     <div className="markdown-content">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            rehypePlugins={[rehypeRaw]}
+                        >
                             {project.content}
                         </ReactMarkdown>
                     </div>

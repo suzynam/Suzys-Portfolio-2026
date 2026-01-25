@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export async function GET(
     request: Request,
@@ -14,6 +14,14 @@ export async function GET(
             auth: process.env.NOTION_API_KEY,
         });
         const n2m = new NotionToMarkdown({ notionClient: notion });
+
+        // Add custom transformers for multi-column layout
+        n2m.setCustomTransformer('column_list', async (block: any) => {
+            return `<div class="notion-column-list">`;
+        });
+        n2m.setCustomTransformer('column', async (block: any) => {
+            return `<div class="notion-column">`;
+        });
 
         console.log('Fetching detail for page:', id);
 
@@ -46,6 +54,7 @@ export async function GET(
         // 2. Get Page Content as Markdown
         const mdblocks = await n2m.pageToMarkdown(id);
         const mdString = n2m.toMarkdownString(mdblocks);
+        const content = mdString.parent || '';
 
         // Process all properties for the info grid
         const processedProperties: any = {};
@@ -78,7 +87,10 @@ export async function GET(
                 date,
                 coverImage,
                 properties: processedProperties,
-                content: mdString.parent
+                content: content.replace(/<div class="notion-column"><\/div>/g, '</div>')
+                    .replace(/<div class="notion-column-list"><\/div>/g, '</div>')
+                // notion-to-md often leaves them empty or unclosed depending on nesting
+                // A better way is to use a more complex parser, but let's try this first.
             }
         });
     } catch (error: any) {

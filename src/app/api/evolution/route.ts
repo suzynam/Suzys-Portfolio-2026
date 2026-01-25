@@ -1,4 +1,4 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export async function GET() {
     const apiKey = process.env.NOTION_API_KEY;
@@ -22,7 +22,7 @@ export async function GET() {
                     }
                 ]
             }),
-            next: { revalidate: 0 }
+            next: { revalidate: 60 }
         });
 
         const data = await response.json();
