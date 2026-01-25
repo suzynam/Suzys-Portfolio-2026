@@ -68,17 +68,17 @@ export default function Home() {
           <div className="container">
             <h2 className="section-title">Capabilities</h2>
             <div className="grid-3">
-              <div className="card capability-card">
+              <div className="card">
                 <h3>Design & Content</h3>
-                <p>6년의 프로덕트 디자인 경험과 다각도의 교육 커리큘럼 및 교안 제작 경험을 바탕으로 풍부한 사용자 경험과 배움을 설계합니다.</p>
+                <p>6년차 프로덕트 디자이너로서 정제된 비주얼 감각과 논리적인 UX 설계 능력을 보유하고 있습니다. 교육 커리큘럼 및 교안 제작을 통해 지식의 구조화에도 능숙합니다.</p>
               </div>
-              <div className="card capability-card">
+              <div className="card">
                 <h3>Systems & Ops</h3>
-                <p>대규모 부트캠프의 안정적인 매출 견인을 위한 교육팀 운영 및 AX(AI Transformation) 기반의 효율적인 워크플로우를 구축합니다.</p>
+                <p>대규모 부트캠프 운영 경험을 바탕으로, 데이터 기반의 효율적인 프로세스를 구축합니다. 특히 AI 툴을 활용한 업무 자동화에 강점을 가지고 있습니다.</p>
               </div>
-              <div className="card capability-card">
+              <div className="card">
                 <h3>AI & Community</h3>
-                <p>기획부터 개발까지 직접 수행하는 AI 빌더이자, 사람과 사람을 연결하는 커뮤니티 빌더 입니니다.</p>
+                <p>프롬프트 엔지니어링부터 AI 에이전트 개발까지 직접 수행하는 빌더입니다. AI 학습 커뮤니티를 운영하며 기술과 사람을 연결하는 가치를 만듭니다.</p>
               </div>
             </div>
           </div>
@@ -91,7 +91,8 @@ export default function Home() {
         <section id="speaking" className="section speaking-section">
           <div className="container">
             <h2 className="section-title">Speaking & Teaching</h2>
-            <p className="section-desc">매번 재강의 요청을 받는, 현업자 대상의 AI 및 디자인 강의를 진행합니다.</p>
+            <p className="hero-subtitle" style={{ marginBottom: '48px' }}>매번 재강의 요청을 받는, 현업자 대상의 AI 및 디자인 강의를 진행합니다.</p>
+
             <div className="speaking-stats">
               <div className="stat-item">
                 <span className="stat-value">4.8+</span>
@@ -112,7 +113,7 @@ export default function Home() {
         <Contact />
       </main>
 
-      <footer className="site-footer">
+      <footer className="footer-section">
         <div className="container">
           <p>&copy; 2024 Suzy Nam. All rights reserved.</p>
         </div>

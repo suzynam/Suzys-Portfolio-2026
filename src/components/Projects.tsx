@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Project {
     id: string;
@@ -68,22 +69,22 @@ export default function Projects() {
                 ) : (
                     <div className="projects-grid">
                         {projects.map((project) => (
-                            <Link href={`/projects/${project.id}`} key={project.id} className="new-project-card">
-                                <div className="project-image-wrapper">
+                            <Link href={`/projects/${project.id}`} key={project.id} className="project-card">
+                                <div className="card-image-wrapper">
                                     {project.coverImage ? (
-                                        <div
-                                            className="project-image"
-                                            style={{ backgroundImage: `url(${project.coverImage})` }}
-                                        ></div>
+                                        <Image
+                                            src={project.coverImage}
+                                            alt={project.title}
+                                            fill
+                                            className="card-image"
+                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                        />
                                     ) : (
-                                        <div className="project-image placeholder"></div>
+                                        <div className="card-image placeholder"></div>
                                     )}
-                                    <div className="project-overlay">
-                                        <span>View Case Study</span>
-                                    </div>
                                 </div>
-                                <div className="project-info">
-                                    <span className="project-category">{project.category}</span>
+                                <div className="card-info">
+                                    <span className="project-tag">{project.category}</span>
                                     <h3 className="project-title">{project.title}</h3>
                                     <p className="project-summary">{project.summary}</p>
                                 </div>
@@ -123,11 +124,10 @@ export default function Projects() {
                     background: #1a1a1a;
                     margin-bottom: 1.5rem;
                 }
-                .project-image {
+                .card-image {
                     width: 100%;
                     height: 100%;
-                    background-size: cover;
-                    background-position: center;
+                    object-fit: cover;
                     transition: transform 0.6s ease;
                 }
                 .project-image.placeholder {

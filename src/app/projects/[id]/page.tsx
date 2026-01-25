@@ -2,6 +2,7 @@
 
 import { useEffect, useState, use } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
@@ -63,7 +64,14 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
     return (
         <article className="project-detail">
             {project.coverImage && (
-                <div className="project-hero" style={{ backgroundImage: `url(${project.coverImage})` }}>
+                <div className="project-hero">
+                    <Image
+                        src={project.coverImage}
+                        alt={project.title}
+                        fill
+                        priority
+                        className="hero-image"
+                    />
                     <div className="hero-overlay"></div>
                     <div className="container hero-container">
                         <div className="project-meta">
@@ -86,21 +94,6 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
             )}
 
             <div className="container main-layout">
-                <aside className="project-sidebar">
-                    <div className="info-grid">
-                        <div className="info-item">
-                            <label>Timeline</label>
-                            <span>{project.properties.Timeline || new Date(project.date).toLocaleDateString()}</span>
-                        </div>
-                        {displayProperties.map(([key, value]) => (
-                            <div className="info-item" key={key}>
-                                <label>{key}</label>
-                                <span>{Array.isArray(value) ? value.join(', ') : (typeof value === 'string' && value.startsWith('http') ? <a href={value} target="_blank" rel="noopener noreferrer">{value}</a> : String(value))}</span>
-                            </div>
-                        ))}
-                    </div>
-                </aside>
-
                 <div className="content-area">
                     {project.summary && (
                         <div className="project-summary">
@@ -128,18 +121,22 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                 .project-hero {
                     height: 70vh;
                     min-height: 500px;
-                    background-size: cover;
-                    background-position: center;
                     position: relative;
                     display: flex;
                     align-items: flex-end;
                     padding-bottom: 80px;
                     margin-bottom: 80px;
+                    overflow: hidden;
+                }
+                .hero-image {
+                    object-fit: cover;
+                    z-index: 0;
                 }
                 .hero-overlay {
                     position: absolute;
                     inset: 0;
                     background: linear-gradient(to bottom, transparent 20%, rgba(10, 10, 10, 0.95));
+                    z-index: 1;
                 }
                 .hero-container {
                     position: relative;
@@ -179,46 +176,12 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                     margin-bottom: 80px;
                 }
                 .main-layout {
-                    display: grid;
-                    grid-template-columns: 280px 1fr;
-                    gap: 80px;
-                    align-items: start;
-                }
-                .project-sidebar {
-                    position: sticky;
-                    top: 120px;
-                }
-                .info-grid {
                     display: flex;
-                    flex-direction: column;
-                    gap: 30px;
-                    padding: 30px;
-                    background: var(--surface-color);
-                    border-radius: 24px;
-                    border: 1px solid rgba(255, 255, 255, 0.05);
-                }
-                .info-item label {
-                    display: block;
-                    font-size: 0.75rem;
-                    text-transform: uppercase;
-                    letter-spacing: 0.1em;
-                    color: var(--text-secondary);
-                    margin-bottom: 8px;
-                    font-weight: 700;
-                }
-                .info-item span {
-                    display: block;
-                    font-size: 1.1rem;
-                    color: var(--text-primary);
-                    font-weight: 500;
-                    word-break: break-word;
-                }
-                .info-item a {
-                    color: var(--accent-color);
-                    text-decoration: underline;
+                    justify-content: center;
                 }
                 .content-area {
                     max-width: 800px;
+                    width: 100%;
                 }
                 .project-summary {
                     font-size: 1.4rem;
@@ -256,9 +219,9 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                 }
                 @media (max-width: 1100px) {
                     .main-layout {
-                        grid-template-columns: 1fr;
-                        gap: 60px;
+                        gap: 0;
                     }
+                }
                     .project-sidebar {
                         position: static;
                     }

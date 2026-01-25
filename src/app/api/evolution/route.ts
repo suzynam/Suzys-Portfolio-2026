@@ -14,18 +14,28 @@ export async function GET() {
                 'Notion-Version': '2022-06-28',
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({
+                sorts: [
+                    {
+                        property: "Timeline",
+                        direction: "descending"
+                    }
+                ]
+            }),
             next: { revalidate: 0 }
         });
 
         const data = await response.json();
 
-        const items = data.results.map((page: any) => {
+        // If 'Timeline' sort fails (e.g. property type mismatch), it might return an error. 
+        // We'll handle data.results safely.
+        const items = (data.results || []).map((page: any) => {
             const props = page.properties;
             const title = props.Name?.title?.[0]?.plain_text || props.Title?.title?.[0]?.plain_text || 'Untitled';
             const role = props.Role?.rich_text?.[0]?.plain_text || props.Position?.rich_text?.[0]?.plain_text || title;
-            const period = props.Period?.rich_text?.[0]?.plain_text || props.Date?.date?.start || '202X';
+            const period = props.Timeline?.rich_text?.[0]?.plain_text || props.Period?.rich_text?.[0]?.plain_text || props.Date?.date?.start || '202X';
             const description = props.Description?.rich_text?.[0]?.plain_text || props.Summary?.rich_text?.[0]?.plain_text || '';
-            const category = props.Category?.select?.name || props.Type?.select?.name || 'General';
+            const category = props.Tag?.select?.name || props.Category?.select?.name || props.Type?.select?.name || 'General';
 
             return { id: page.id, title, role, period, description, category };
         });
