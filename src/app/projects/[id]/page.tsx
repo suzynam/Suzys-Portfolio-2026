@@ -49,8 +49,26 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
 
     if (loading) {
         return (
-            <div className="container" style={{ paddingTop: '100px', textAlign: 'center' }}>
-                <div className="loading-shimmer">Loading project content...</div>
+            <div className="project-detail">
+                <div className="skeleton skeleton-cover"></div>
+                <div className="container">
+                    <div className="skeleton skeleton-meta"></div>
+                    <div className="skeleton skeleton-title"></div>
+
+                    <div className="main-layout" style={{ marginTop: '4rem' }}>
+                        <div className="content-area">
+                            <div className="skeleton skeleton-text" style={{ width: '100%' }}></div>
+                            <div className="skeleton skeleton-text" style={{ width: '92%' }}></div>
+                            <div className="skeleton skeleton-text" style={{ width: '96%' }}></div>
+                            <div className="skeleton skeleton-text" style={{ width: '85%' }}></div>
+
+                            <div className="skeleton skeleton-block"></div>
+
+                            <div className="skeleton skeleton-text" style={{ width: '100%' }}></div>
+                            <div className="skeleton skeleton-text" style={{ width: '90%' }}></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

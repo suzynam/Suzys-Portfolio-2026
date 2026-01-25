@@ -77,6 +77,7 @@ export default function Projects() {
                                             alt={project.title}
                                             fill
                                             className="card-image"
+                                            style={{ objectFit: 'cover' }}
                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                         />
                                     ) : (
@@ -108,14 +109,14 @@ export default function Projects() {
                     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
                     gap: 3rem;
                 }
-                .new-project-card {
+                .project-card {
                     display: flex;
                     flex-direction: column;
                     text-decoration: none;
                     color: inherit;
                     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
                 }
-                .project-image-wrapper {
+                .card-image-wrapper {
                     position: relative;
                     width: 100%;
                     aspect-ratio: 16 / 10;
@@ -124,13 +125,11 @@ export default function Projects() {
                     background: #1a1a1a;
                     margin-bottom: 1.5rem;
                 }
+                /* card-image styles focusing on transition since object-fit is inline */
                 .card-image {
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
                     transition: transform 0.6s ease;
                 }
-                .project-image.placeholder {
+                .card-image.placeholder {
                     background: linear-gradient(45deg, #1f1f1f, #2a2a2a);
                 }
                 .project-overlay {
@@ -142,6 +141,7 @@ export default function Projects() {
                     justify-content: center;
                     opacity: 0;
                     transition: opacity 0.3s ease;
+                    z-index: 2;
                 }
                 .project-overlay span {
                     padding: 0.8rem 1.5rem;
@@ -153,13 +153,13 @@ export default function Projects() {
                     transform: translateY(10px);
                     transition: transform 0.3s ease;
                 }
-                .new-project-card:hover .project-image {
+                .project-card:hover .card-image {
                     transform: scale(1.05);
                 }
-                .new-project-card:hover .project-overlay {
+                .project-card:hover .project-overlay {
                     opacity: 1;
                 }
-                .new-project-card:hover .project-overlay span {
+                .project-card:hover .project-overlay span {
                     transform: translateY(0);
                 }
                 .project-category {

@@ -1,8 +1,14 @@
 :root {
-  --bg-color: #0a0a0a;
+  /* App-specific variables (renamed to avoid collisions) */
+  --app-bg: #0a0a0a;
+  --app-fg: #f3f3f3;
+
+  --bg-color: var(--app-bg);
+  /* Legacy mapping if needed, but risky */
+
   --surface-color: #121212;
   /* Slightly lighter than bg for subtle depth */
-  --text-primary: #f3f3f3;
+  --text-primary: var(--app-fg);
   --text-secondary: #a1a1aa;
   --accent-color: #3b82f6;
   --accent-glow: rgba(59, 130, 246, 0.4);
@@ -35,7 +41,7 @@ html {
 }
 
 body {
-  background-color: var(--bg-color);
+  background-color: var(--app-bg);
   color: var(--text-primary);
   font-family: var(--font-main), var(--font-kr);
   line-height: 1.6;
@@ -226,7 +232,7 @@ p {
 
 .btn-primary {
   background-color: var(--text-primary);
-  color: var(--bg-color);
+  color: var(--app-bg);
   border: 1px solid var(--text-primary);
 }
 
@@ -279,7 +285,7 @@ p {
   top: 8px;
   width: 8px;
   height: 8px;
-  background: var(--bg-color);
+  background: var(--app-bg);
   border: 1.5px solid var(--text-secondary);
   border-radius: 50%;
   transition: all 0.4s ease;
@@ -666,7 +672,7 @@ p {
 /* Project Detail Page Styles */
 .project-detail {
   padding-bottom: 100px;
-  background-color: var(--bg-color);
+  background-color: var(--app-bg);
 }
 
 .project-hero {
@@ -780,9 +786,23 @@ p {
 /* react-notion-x Dark Mode Overrides */
 .notion-content-wrapper {
   margin-top: 2rem;
+
+  /* FORCE LIBRARY VARIABLES TO USE APP THEME */
+  --bg-color: var(--app-bg) !important;
+  --fg-color: var(--app-fg) !important;
+
+  --notion-red: #ff5c5c;
+  --notion-pink: #ff5c8d;
+  --notion-blue: #5c8dff;
+  --notion-purple: #9d5cff;
+  --notion-teal: #5cffd9;
+  --notion-yellow: #ffdc5c;
+  --notion-orange: #ff9d5c;
+  --notion-brown: #d99d5c;
+  --notion-gray: #9d9d9d;
 }
 
-/* Force dark theme on ALL elements */
+/* Force dark theme on ALL elements using the corrected variables */
 .notion-content-wrapper,
 .notion-content-wrapper *,
 .notion-content-wrapper .notion,
@@ -792,15 +812,15 @@ p {
 .notion-content-wrapper .notion-viewport,
 .notion-content-wrapper .notion-frame,
 .notion-content-wrapper .notion-scroller {
-  background: var(--bg-color) !important;
-  background-color: var(--bg-color) !important;
+  background: var(--app-bg) !important;
+  background-color: var(--app-bg) !important;
 }
 
 /* Text colors */
 .notion-content-wrapper .notion-text,
 .notion-content-wrapper p,
 .notion-content-wrapper li,
-.notion-content-wrapper span {
+.notion-content-wrapper span:not(.notion-h-title) {
   color: var(--text-secondary) !important;
 }
 
@@ -809,8 +829,17 @@ p {
 .notion-content-wrapper .notion-h3,
 .notion-content-wrapper h1,
 .notion-content-wrapper h2,
-.notion-content-wrapper h3 {
-  color: var(--text-primary) !important;
+.notion-content-wrapper h3,
+.notion-h-title {
+  color: #ffffff !important;
+  /* Brighter white for headings */
+  font-weight: 700;
+}
+
+/* Hide Properties Table (Collection View at top) */
+.notion-content-wrapper .notion-collection-page-properties,
+.notion-content-wrapper .notion-collection-row {
+  display: none !important;
 }
 
 /* Tables */
@@ -993,6 +1022,7 @@ p {
 
   .notion-table-wrapper {
     margin: 24px -20px;
+    padding: 0 20px;
   }
 
   .notion-table {
@@ -1003,10 +1033,65 @@ p {
   .notion-table td {
     padding: 10px 12px;
   }
+}
 
-  .speaking-stats {
-    flex-direction: column;
-    gap: 3rem;
-    padding: 2rem;
+.speaking-stats {
+  flex-direction: column;
+  gap: 3rem;
+  padding: 2rem;
+}
+
+/* Skeleton Loading Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
   }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: var(--surface-color);
+  background-image: linear-gradient(90deg,
+      var(--surface-color) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      var(--surface-color) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+.skeleton-cover {
+  width: 100%;
+  height: 60vh;
+  min-height: 400px;
+  margin-bottom: 2rem;
+}
+
+.skeleton-text {
+  height: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+
+.skeleton-title {
+  height: 4rem;
+  width: 60%;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+}
+
+.skeleton-meta {
+  height: 2rem;
+  width: 150px;
+  border-radius: 50px;
+  margin-bottom: 2rem;
+}
+
+.skeleton-block {
+  height: 200px;
+  margin: 2rem 0;
+  border-radius: 12px;
 }

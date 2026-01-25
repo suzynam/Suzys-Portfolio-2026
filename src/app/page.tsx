@@ -37,7 +37,7 @@ export default function Home() {
       {/* Header / Navigation */}
       <header className="site-header">
         <div className="container">
-          <Link href="#" className="logo">Portfolio.</Link>
+          <Link href="#" className="logo">Suzy Nam</Link>
           <nav className={`main-nav ${mobileMenuOpen ? 'active' : ''}`}>
             <ul>
               <li><Link href="#about">About</Link></li>
