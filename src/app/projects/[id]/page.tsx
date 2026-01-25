@@ -1,11 +1,11 @@
-"use client";
-
-import { useEffect, useState, use } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import { notFound } from 'next/navigation';
+
+export const revalidate = 60;
 
 interface ProjectDetail {
     id: string;
@@ -18,49 +18,101 @@ interface ProjectDetail {
     content: string;
 }
 
-export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params);
-    const [project, setProject] = useState<ProjectDetail | null>(null);
-    const [loading, setLoading] = useState(true);
+async function getProjectData(id: string): Promise<ProjectDetail | null> {
+    try {
+        const { Client } = require('@notionhq/client');
+        const { NotionToMarkdown } = require('notion-to-md');
 
-    useEffect(() => {
-        async function fetchProject() {
-            try {
-                const res = await fetch(`/api/projects/${id}`);
-                const json = await res.json();
-                if (json.data) {
-                    setProject(json.data);
-                }
-            } catch (err) {
-                console.error('Failed to fetch project', err);
-            } finally {
-                setLoading(false);
-            }
+        const notion = new Client({
+            auth: process.env.NOTION_API_KEY,
+        });
+        const n2m = new NotionToMarkdown({ notionClient: notion });
+
+        // Add custom transformers for multi-column layout
+        n2m.setCustomTransformer('column_list', async (block: any) => {
+            return `<div class="notion-column-list">`;
+        });
+        n2m.setCustomTransformer('column', async (block: any) => {
+            return `<div class="notion-column">`;
+        });
+
+        // Get Page Metadata
+        const page = await notion.request({
+            path: `pages/${id}`,
+            method: 'get',
+        }) as any;
+
+        const props = page.properties;
+        const title = props.Name?.title?.[0]?.plain_text ||
+            props.Title?.title?.[0]?.plain_text ||
+            'Untitled Project';
+
+        const category = props.Tag?.select?.name ||
+            props.Category?.select?.name ||
+            'Project';
+
+        const summary = props.Description?.rich_text?.[0]?.plain_text ||
+            props.Summary?.rich_text?.[0]?.plain_text ||
+            '';
+
+        const date = props.Date?.date?.start || page.created_time;
+
+        let coverImage = null;
+        if (page.cover) {
+            coverImage = page.cover.external?.url || page.cover.file?.url;
         }
-        fetchProject();
-    }, [id]);
 
-    if (loading) {
-        return (
-            <div className="container" style={{ paddingTop: '100px', textAlign: 'center' }}>
-                <div className="loading-shimmer">Loading project content...</div>
-            </div>
-        );
+        // Get Page Content as Markdown
+        const mdblocks = await n2m.pageToMarkdown(id);
+        const mdString = n2m.toMarkdownString(mdblocks);
+        const content = mdString.parent || '';
+
+        // Process all properties for the info grid
+        const processedProperties: any = {};
+        for (const [key, value] of Object.entries(props)) {
+            const p = value as any;
+            if (p.type === 'title') processedProperties[key] = p.title?.[0]?.plain_text;
+            else if (p.type === 'rich_text') processedProperties[key] = p.rich_text?.[0]?.plain_text;
+            else if (p.type === 'select') processedProperties[key] = p.select?.name;
+            else if (p.type === 'multi_select') processedProperties[key] = p.multi_select?.map((s: any) => s.name);
+            else if (p.type === 'date') {
+                if (p.date?.end) {
+                    processedProperties[key] = `${p.date.start} → ${p.date.end}`;
+                } else {
+                    processedProperties[key] = p.date?.start;
+                }
+            }
+            else if (p.type === 'url') processedProperties[key] = p.url;
+            else if (p.type === 'email') processedProperties[key] = p.email;
+            else if (p.type === 'phoneNumber') processedProperties[key] = p.phoneNumber;
+            else if (p.type === 'number') processedProperties[key] = p.number;
+            else if (p.type === 'checkbox') processedProperties[key] = p.checkbox;
+        }
+
+        return {
+            id,
+            title,
+            category,
+            summary,
+            date,
+            coverImage,
+            properties: processedProperties,
+            content: content.replace(/<div class="notion-column"><\/div>/g, '</div>')
+                .replace(/<div class="notion-column-list"><\/div>/g, '</div>')
+        };
+    } catch (error: any) {
+        console.error('Failed to fetch project:', error);
+        return null;
     }
+}
+
+export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = await params;
+    const project = await getProjectData(id);
 
     if (!project) {
-        return (
-            <div className="container" style={{ paddingTop: '100px', textAlign: 'center' }}>
-                <h2>Project not found</h2>
-                <Link href="/" className="btn btn-primary">Go Back Home</Link>
-            </div>
-        );
+        notFound();
     }
-
-    // Filter out internal or handled properties
-    const ignoredProps = ['Name', 'Title', 'Tag', 'Category', 'Description', 'Summary', 'Date', 'Timeline'];
-    const displayProperties = Object.entries(project.properties || {})
-        .filter(([key]) => !ignoredProps.includes(key));
 
     return (
         <article className="project-detail">
@@ -224,17 +276,6 @@ export default function ProjectPage({ params }: { params: Promise<{ id: string }
                 @media (max-width: 1100px) {
                     .main-layout {
                         gap: 0;
-                    }
-                }
-                    .project-sidebar {
-                        position: static;
-                    }
-                    .info-grid {
-                        flex-direction: row;
-                        flex-wrap: wrap;
-                    }
-                    .info-item {
-                        flex: 1 1 200px;
                     }
                 }
                 @media (max-width: 768px) {
