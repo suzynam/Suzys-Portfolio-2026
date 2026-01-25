@@ -1,11 +1,19 @@
+'use client';
+
+import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeRaw from 'rehype-raw';
-import { notFound } from 'next/navigation';
+import { NotionRenderer } from 'react-notion-x';
+import { Code } from 'react-notion-x/build/third-party/code';
+import { Collection } from 'react-notion-x/build/third-party/collection';
+import { Equation } from 'react-notion-x/build/third-party/equation';
+import { Modal } from 'react-notion-x/build/third-party/modal';
+import { Pdf } from 'react-notion-x/build/third-party/pdf';
 
-export const revalidate = 60;
+// Import required CSS
+import 'react-notion-x/src/styles.css';
+import 'prismjs/themes/prism-tomorrow.css';
+import 'katex/dist/katex.min.css';
 
 interface ProjectDetail {
     id: string;
@@ -14,131 +22,46 @@ interface ProjectDetail {
     summary: string;
     date: string;
     coverImage: string | null;
-    properties: Record<string, any>;
-    content: string;
+    recordMap: any;
 }
 
-async function getProjectData(id: string): Promise<ProjectDetail | null> {
-    try {
-        const { Client } = require('@notionhq/client');
-        const { NotionToMarkdown } = require('notion-to-md');
+export default function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params);
+    const [project, setProject] = useState<ProjectDetail | null>(null);
+    const [loading, setLoading] = useState(true);
 
-        const notion = new Client({
-            auth: process.env.NOTION_API_KEY,
-        });
-        const n2m = new NotionToMarkdown({ notionClient: notion });
-
-        // Add custom transformers for better visual fidelity
-
-        // Multi-column layout
-        n2m.setCustomTransformer('column_list', async (block: any) => {
-            const columnCount = block.column_list?.children?.length || 2;
-            return `<div class="notion-column-list" data-columns="${columnCount}">`;
-        });
-
-        n2m.setCustomTransformer('column', async (block: any) => {
-            return `<div class="notion-column">`;
-        });
-
-        // Tables
-        n2m.setCustomTransformer('table', async (block: any) => {
-            return `<div class="notion-table-wrapper"><table class="notion-table">`;
-        });
-
-        n2m.setCustomTransformer('table_row', async (block: any) => {
-            const cells = block.table_row?.cells || [];
-            const isHeader = block.has_column_header;
-            const tag = isHeader ? 'th' : 'td';
-            const cellsHtml = cells.map((cell: any[]) => {
-                const text = cell.map((c: any) => c.plain_text || '').join('');
-                return `<${tag}>${text}</${tag}>`;
-            }).join('');
-            return `<tr>${cellsHtml}</tr>`;
-        });
-
-        // Callouts (for styled boxes)
-        n2m.setCustomTransformer('callout', async (block: any) => {
-            const emoji = block.callout?.icon?.emoji || '';
-            return `<div class="notion-callout"><span class="callout-icon">${emoji}</span><div class="callout-content">`;
-        });
-
-        // Get Page Metadata
-        const page = await notion.request({
-            path: `pages/${id}`,
-            method: 'get',
-        }) as any;
-
-        const props = page.properties;
-        const title = props.Name?.title?.[0]?.plain_text ||
-            props.Title?.title?.[0]?.plain_text ||
-            'Untitled Project';
-
-        const category = props.Tag?.select?.name ||
-            props.Category?.select?.name ||
-            'Project';
-
-        const summary = props.Description?.rich_text?.[0]?.plain_text ||
-            props.Summary?.rich_text?.[0]?.plain_text ||
-            '';
-
-        const date = props.Date?.date?.start || page.created_time;
-
-        let coverImage = null;
-        if (page.cover) {
-            coverImage = page.cover.external?.url || page.cover.file?.url;
-        }
-
-        // Get Page Content as Markdown
-        const mdblocks = await n2m.pageToMarkdown(id);
-        const mdString = n2m.toMarkdownString(mdblocks);
-        const content = mdString.parent || '';
-
-        // Process all properties for the info grid
-        const processedProperties: any = {};
-        for (const [key, value] of Object.entries(props)) {
-            const p = value as any;
-            if (p.type === 'title') processedProperties[key] = p.title?.[0]?.plain_text;
-            else if (p.type === 'rich_text') processedProperties[key] = p.rich_text?.[0]?.plain_text;
-            else if (p.type === 'select') processedProperties[key] = p.select?.name;
-            else if (p.type === 'multi_select') processedProperties[key] = p.multi_select?.map((s: any) => s.name);
-            else if (p.type === 'date') {
-                if (p.date?.end) {
-                    processedProperties[key] = `${p.date.start} → ${p.date.end}`;
-                } else {
-                    processedProperties[key] = p.date?.start;
+    useEffect(() => {
+        async function fetchProject() {
+            try {
+                const res = await fetch(`/api/projects/${id}`);
+                const json = await res.json();
+                if (json.data) {
+                    setProject(json.data);
                 }
+            } catch (err) {
+                console.error('Failed to fetch project', err);
+            } finally {
+                setLoading(false);
             }
-            else if (p.type === 'url') processedProperties[key] = p.url;
-            else if (p.type === 'email') processedProperties[key] = p.email;
-            else if (p.type === 'phoneNumber') processedProperties[key] = p.phoneNumber;
-            else if (p.type === 'number') processedProperties[key] = p.number;
-            else if (p.type === 'checkbox') processedProperties[key] = p.checkbox;
         }
+        fetchProject();
+    }, [id]);
 
-        return {
-            id,
-            title,
-            category,
-            summary,
-            date,
-            coverImage,
-            properties: processedProperties,
-            content: content
-                .replace(/<div class="notion-column"><\/div>/g, '</div>')
-                .replace(/<div class="notion-column-list"[^>]*><\/div>/g, '</div>')
-        };
-    } catch (error: any) {
-        console.error('Failed to fetch project:', error);
-        return null;
+    if (loading) {
+        return (
+            <div className="container" style={{ paddingTop: '100px', textAlign: 'center' }}>
+                <div className="loading-shimmer">Loading project content...</div>
+            </div>
+        );
     }
-}
-
-export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
-    const project = await getProjectData(id);
 
     if (!project) {
-        notFound();
+        return (
+            <div className="container" style={{ paddingTop: '100px', textAlign: 'center' }}>
+                <h2>Project not found</h2>
+                <Link href="/" className="btn btn-primary">Go Back Home</Link>
+            </div>
+        );
     }
 
     return (
@@ -181,13 +104,20 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                         </div>
                     )}
 
-                    <div className="markdown-content">
-                        <ReactMarkdown
-                            remarkPlugins={[remarkGfm]}
-                            rehypePlugins={[rehypeRaw]}
-                        >
-                            {project.content}
-                        </ReactMarkdown>
+                    <div className="notion-content-wrapper">
+                        <NotionRenderer
+                            recordMap={project.recordMap}
+                            fullPage={false}
+                            darkMode={true}
+                            disableHeader
+                            components={{
+                                Code,
+                                Collection,
+                                Equation,
+                                Modal,
+                                Pdf
+                            }}
+                        />
                     </div>
 
                     <footer className="project-footer">
@@ -195,121 +125,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
                     </footer>
                 </div>
             </div>
-
-            <style jsx global>{`
-                .project-detail {
-                    padding-bottom: 100px;
-                    background-color: var(--bg-color);
-                }
-                .project-hero {
-                    height: 70vh;
-                    min-height: 500px;
-                    position: relative;
-                    display: flex;
-                    align-items: flex-end;
-                    padding-bottom: 80px;
-                    margin-bottom: 80px;
-                    overflow: hidden;
-                }
-                .hero-image {
-                    object-fit: cover;
-                    z-index: 0;
-                }
-                .hero-overlay {
-                    position: absolute;
-                    inset: 0;
-                    background: linear-gradient(to bottom, transparent 20%, rgba(10, 10, 10, 0.95));
-                    z-index: 1;
-                }
-                .hero-container {
-                    position: relative;
-                    z-index: 2;
-                }
-                .project-meta {
-                    display: flex;
-                    align-items: center;
-                    gap: 15px;
-                    margin-bottom: 20px;
-                }
-                .tag-pill {
-                    background: var(--accent-color);
-                    color: white;
-                    padding: 0.4rem 1rem;
-                    border-radius: 50px;
-                    font-size: 0.85rem;
-                    font-weight: 700;
-                    letter-spacing: 0.05em;
-                    text-transform: uppercase;
-                }
-                .date-text {
-                    color: var(--text-secondary);
-                    font-size: 0.95rem;
-                    font-weight: 500;
-                }
-                .project-title {
-                    font-size: clamp(3rem, 7vw, 5rem);
-                    font-weight: 800;
-                    margin: 0;
-                    line-height: 1.1;
-                    letter-spacing: -0.04em;
-                    color: var(--text-primary);
-                }
-                .project-header {
-                    padding-top: 180px;
-                    margin-bottom: 80px;
-                }
-                .main-layout {
-                    display: flex;
-                    justify-content: center;
-                }
-                .content-area {
-                    max-width: 800px;
-                    width: 100%;
-                }
-                .project-summary {
-                    font-size: 1.4rem;
-                    line-height: 1.6;
-                    color: var(--text-primary);
-                    margin-bottom: 60px;
-                    font-weight: 400;
-                    border-left: 4px solid var(--accent-color);
-                    padding-left: 30px;
-                }
-                .markdown-content {
-                    font-size: 1.15rem;
-                    line-height: 1.9;
-                    color: var(--text-secondary);
-                }
-                .markdown-content h1, .markdown-content h2, .markdown-content h3 {
-                    color: var(--text-primary);
-                    margin-top: 3em;
-                    margin-bottom: 1.2em;
-                    font-weight: 700;
-                }
-                .markdown-content h2 { font-size: 2.2rem; }
-                .markdown-content h3 { font-size: 1.8rem; }
-                .markdown-content p { margin-bottom: 2rem; }
-                .markdown-content img {
-                    max-width: 100%;
-                    border-radius: 20px;
-                    margin: 4rem 0;
-                    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-                }
-                .project-footer {
-                    margin-top: 100px;
-                    border-top: 1px solid rgba(255,255,255,0.1);
-                    padding-top: 60px;
-                }
-                @media (max-width: 1100px) {
-                    .main-layout {
-                        gap: 0;
-                    }
-                }
-                @media (max-width: 768px) {
-                    .project-title { font-size: 3rem; }
-                    .project-hero { height: 50vh; }
-                }
-            `}</style>
         </article>
     );
 }

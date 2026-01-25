@@ -663,6 +663,230 @@ p {
   }
 }
 
+/* Project Detail Page Styles */
+.project-detail {
+  padding-bottom: 100px;
+  background-color: var(--bg-color);
+}
+
+.project-hero {
+  height: 70vh;
+  min-height: 500px;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 80px;
+  margin-bottom: 80px;
+  overflow: hidden;
+}
+
+.hero-image {
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 20%, rgba(10, 10, 10, 0.95));
+  z-index: 1;
+}
+
+.hero-container {
+  position: relative;
+  z-index: 2;
+}
+
+.project-meta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.tag-pill {
+  background: var(--accent-color);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.date-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.project-title {
+  font-size: clamp(3rem, 7vw, 5rem);
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+}
+
+.project-header {
+  padding-top: 180px;
+  margin-bottom: 80px;
+}
+
+.main-layout {
+  display: flex;
+  justify-content: center;
+}
+
+.content-area {
+  max-width: 800px;
+  width: 100%;
+}
+
+.project-summary {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin-bottom: 60px;
+  font-weight: 400;
+  border-left: 4px solid var(--accent-color);
+  padding-left: 30px;
+}
+
+.project-footer {
+  margin-top: 100px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 60px;
+}
+
+@media (max-width: 1100px) {
+  .main-layout {
+    gap: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .project-title {
+    font-size: 3rem;
+  }
+
+  .project-hero {
+    height: 50vh;
+  }
+}
+
+/* react-notion-x Dark Mode Overrides */
+.notion-content-wrapper {
+  margin-top: 2rem;
+}
+
+/* Force dark theme on ALL elements */
+.notion-content-wrapper,
+.notion-content-wrapper *,
+.notion-content-wrapper .notion,
+.notion-content-wrapper .notion-page,
+.notion-content-wrapper .notion-page-content,
+.notion-content-wrapper .notion-page-content-inner,
+.notion-content-wrapper .notion-viewport,
+.notion-content-wrapper .notion-frame,
+.notion-content-wrapper .notion-scroller {
+  background: var(--bg-color) !important;
+  background-color: var(--bg-color) !important;
+}
+
+/* Text colors */
+.notion-content-wrapper .notion-text,
+.notion-content-wrapper p,
+.notion-content-wrapper li,
+.notion-content-wrapper span {
+  color: var(--text-secondary) !important;
+}
+
+.notion-content-wrapper .notion-h1,
+.notion-content-wrapper .notion-h2,
+.notion-content-wrapper .notion-h3,
+.notion-content-wrapper h1,
+.notion-content-wrapper h2,
+.notion-content-wrapper h3 {
+  color: var(--text-primary) !important;
+}
+
+/* Tables */
+.notion-content-wrapper .notion-table,
+.notion-content-wrapper .notion-table-view {
+  background: transparent !important;
+}
+
+.notion-content-wrapper .notion-table-cell,
+.notion-content-wrapper .notion-table-cell-text {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: var(--text-primary) !important;
+}
+
+.notion-content-wrapper .notion-table-th {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Callouts */
+.notion-content-wrapper .notion-callout {
+  background: rgba(135, 131, 255, 0.1) !important;
+  border-color: rgba(135, 131, 255, 0.5) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Columns */
+.notion-content-wrapper .notion-column,
+.notion-content-wrapper .notion-column-list {
+  background: transparent !important;
+}
+
+/* Code blocks */
+.notion-content-wrapper .notion-code {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Quotes */
+.notion-content-wrapper .notion-quote {
+  background: transparent !important;
+  border-left-color: rgba(135, 131, 255, 0.5) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Lists */
+.notion-content-wrapper .notion-list-item {
+  color: var(--text-secondary) !important;
+}
+
+/* Dividers */
+.notion-content-wrapper .notion-hr {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Images */
+.notion-content-wrapper img {
+  border-radius: 12px;
+}
+
+/* Remove default padding */
+.notion-content-wrapper .notion-page {
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+/* Links */
+.notion-content-wrapper a {
+  color: var(--accent-color) !important;
+}
+
+.notion-content-wrapper a:hover {
+  opacity: 0.8;
+}
+
 /* Notion Multi-Column Layout */
 .notion-column-list {
   display: grid;
