@@ -1,34 +1,58 @@
+"use client";
+
+import { useEffect, useState } from 'react';
+
+interface EvolutionItem {
+    id: string;
+    title: string; // Used as Role/Title
+    role: string;
+    period: string; // Used as Year/Phase
+    description: string;
+    category: string;
+}
+
 export default function Evolution() {
+    const [items, setItems] = useState<EvolutionItem[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                const res = await fetch('/api/evolution');
+                const json = await res.json();
+                if (json.data && Array.isArray(json.data)) {
+                    setItems(json.data);
+                }
+            } catch (err) {
+                console.error('Failed to fetch evolution data', err);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, []);
+
+    // Fallback data if API returns empty (so the site doesn't look broken during setup)
+    const displayItems = items.length > 0 ? items : [
+        { id: '1', period: 'Phase 1', role: 'Product Designer', description: 'User Experience & UI Design (5 Years)' },
+        { id: '2', period: 'Phase 2', role: 'Content Creator', description: 'Design & AI Knowledge Sharing' },
+        { id: '3', period: 'Phase 3', role: 'Lecturer', description: 'Offline/Online Teaching' },
+        { id: '4', period: 'Phase 4', role: 'Team Lead', description: 'Education Ops & System Building' },
+        { id: '5', period: 'Current', role: 'AI Solopreneur', description: 'Building profitable AI Products' },
+    ];
+
     return (
         <section id="evolution" className="section evolution-section">
             <div className="container">
-                <h2 className="section-title">The Evolution</h2>
+                <h2 className="section-title">The Evolution {loading && <span style={{ fontSize: '0.5em', opacity: 0.5 }}>(Syncing...)</span>}</h2>
                 <div className="timeline">
-                    <div className="timeline-item">
-                        <span className="year">Phase 1</span>
-                        <h3>Product Designer</h3>
-                        <p>User Experience & UI Design (5 Years)</p>
-                    </div>
-                    <div className="timeline-item">
-                        <span className="year">Phase 2</span>
-                        <h3>Content Creator</h3>
-                        <p>Design & AI Knowledge Sharing</p>
-                    </div>
-                    <div className="timeline-item">
-                        <span className="year">Phase 3</span>
-                        <h3>Lecturer</h3>
-                        <p>Offline/Online Teaching</p>
-                    </div>
-                    <div className="timeline-item">
-                        <span className="year">Phase 4</span>
-                        <h3>Team Lead</h3>
-                        <p>Education Ops & System Building</p>
-                    </div>
-                    <div className="timeline-item highlight">
-                        <span className="year">Current</span>
-                        <h3>AI Solopreneur</h3>
-                        <p>Building profitable AI Products</p>
-                    </div>
+                    {displayItems.map((item, index) => (
+                        <div key={item.id || index} className={`timeline-item ${index === displayItems.length - 1 ? 'highlight' : ''}`}>
+                            <span className="year">{item.period || `Phase ${index + 1}`}</span>
+                            <h3>{item.role || item.title || 'Untitled'}</h3>
+                            <p>{item.description}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>

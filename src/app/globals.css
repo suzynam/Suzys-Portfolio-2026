@@ -5,8 +5,10 @@
   --text-primary: #f3f3f3;
   --text-secondary: #a1a1aa;
   --accent-color: #3b82f6;
-  /* Electric Blue preference, scalable */
   --accent-glow: rgba(59, 130, 246, 0.5);
+
+  --card-radius: 20px;
+  --nav-blur: 10px;
 
   --font-main: 'Outfit', sans-serif;
   --font-kr: 'Noto Sans KR', sans-serif;
@@ -93,10 +95,11 @@ p {
 .site-header {
   position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
-  z-index: 100;
+  z-index: 1000;
   padding: 1.5rem 0;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(var(--nav-blur));
   background: rgba(10, 10, 10, 0.8);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -569,4 +572,79 @@ p {
     right: -30%;
     top: -20%;
   }
+}
+
+/* Markdown Content Styling */
+.markdown-content {
+  font-family: 'Inter', var(--font-main), sans-serif;
+  color: var(--text-secondary);
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+  color: var(--text-primary);
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.markdown-content h2 {
+  font-size: 2rem;
+}
+
+.markdown-content h3 {
+  font-size: 1.5rem;
+}
+
+.markdown-content p {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.markdown-content img {
+  max-width: 100%;
+  border-radius: 12px;
+  margin: 2.5rem 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-content li {
+  margin-bottom: 0.5rem;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid var(--accent-color);
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  margin: 2rem 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+}
+
+.markdown-content code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.markdown-content pre {
+  background: #1e1e1e;
+  padding: 1.5rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 2rem;
+}
+
+.markdown-content hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 3rem 0;
 }
