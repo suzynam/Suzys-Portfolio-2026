@@ -3,16 +3,16 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Suzy Nam | Product Designer to AI Solopreneur",
-  description: "디자인과 시스템, 그리고 AI를 연결합니다. 제품 디자이너에서 AI 솔로프러너로 진화하는 수지의 여정과 프로젝트를 확인해보세요.",
+  title: "Suzy Nam | Connecting Design, Systems, and AI",
+  description: "디자인과 시스템, 그리고 AI를 통한 배움을 연결합니다. 6년의 프로덕트 디자인, 팀 리딩, 그리고 AI 개발 경험을 바탕으로 새로운 가치를 설계합니다.",
   openGraph: {
-    title: "Suzy Nam | AI-Augmented Product Builder",
-    description: "Product Designer turned AI Solopreneur. Building systems and products with design engineering and AI.",
+    title: "Suzy Nam | Multidisdisciplinary System Builder",
+    description: "Connecting Design, Systems, and Learning through AI. Explore the journey of a Product Designer, Educator, and System Builder.",
     url: 'https://suzys-portfolio-2026.vercel.app',
     siteName: "Suzy Nam Portfolio",
     images: [
       {
-        url: '/og-image.png', // public/og-image.png 파일이 필요합니다.
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'Suzy Nam Portfolio Preview',
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Suzy Nam | AI-Augmented Product Builder",
-    description: "Product Designer turned AI Solopreneur. Building systems and products with design engineering and AI.",
+    title: "Suzy Nam | Design, Systems, and AI",
+    description: "Multidisciplinary expertise in product design, education systems, and AI development.",
     images: ['/og-image.png'],
   },
 };
