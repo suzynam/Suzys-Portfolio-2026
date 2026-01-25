@@ -10,8 +10,8 @@ export default function Hero() {
                     <span className="block-reveal highlight">Scaling with AI.</span>
                 </h1>
                 <p className="hero-subtitle">
-                    5년차 프로덕트 디자이너에서 AI 솔로프리너까지.<br />
-                    디자인과 기술을 연결하여 가치를 만듭니다.
+                    프로덕트 디자인, 팀 리딩, 그리고 AI 개발까지.<br />
+                    디자인과 시스템, 그리고 AI를 통한 배움을 연결합니다.
                 </p>
                 <div className="hero-cta">
                     <Link href="#evolution" className="btn btn-primary">My Journey</Link>

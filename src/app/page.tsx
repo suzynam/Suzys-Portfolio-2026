@@ -69,16 +69,16 @@ export default function Home() {
             <h2 className="section-title">Capabilities</h2>
             <div className="grid-3">
               <div className="card capability-card">
-                <h3>Design</h3>
-                <p>UI/UX, Design Systems, Brand Identity</p>
+                <h3>Design & Content</h3>
+                <p>6년의 프로덕트 디자인 경험과 다각도의 교육 커리큘럼 및 교안 제작 경험을 바탕으로 풍부한 사용자 경험과 배움을 설계합니다.</p>
               </div>
               <div className="card capability-card">
-                <h3>Systems</h3>
-                <p>Ops Automation, Workflow Optimization, Team Leadership</p>
+                <h3>Systems & Ops</h3>
+                <p>팀 리더로서의 HR 및 RnR 설계, 240억 매출 견인을 위한 교육팀 운영 및 AX(AI Transformation) 기반의 효율적인 워크플로우를 구축합니다.</p>
               </div>
               <div className="card capability-card">
-                <h3>AI Engineering</h3>
-                <p>LLM Integration, Prompt Engineering, Full-stack Build</p>
+                <h3>AI & Community</h3>
+                <p>기획부터 개발까지 직접 수행하는 AI 빌더이자, 디자인 다오(Design DAO)를 통해 강력한 커뮤니티와 파트너십을 빌딩합니다.</p>
               </div>
             </div>
           </div>
@@ -91,7 +91,21 @@ export default function Home() {
         <section id="speaking" className="section speaking-section">
           <div className="container">
             <h2 className="section-title">Speaking & Teaching</h2>
-            <p className="section-desc">지식을 나누고 함께 성장합니다.</p>
+            <p className="section-desc">매번 재강의 요청을 받는, 현업자 대상의 AI 및 디자인 강의를 진행합니다.</p>
+            <div className="speaking-stats">
+              <div className="stat-item">
+                <span className="stat-value">4.8+</span>
+                <span className="stat-label">Average Satisfaction</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">500+</span>
+                <span className="stat-label">Total Students</span>
+              </div>
+              <div className="stat-item">
+                <span className="stat-value">100%</span>
+                <span className="stat-label">Re-lecture Request Rate</span>
+              </div>
+            </div>
           </div>
         </section>
 
