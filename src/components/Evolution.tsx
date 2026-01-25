@@ -32,13 +32,13 @@ export default function Evolution() {
         fetchData();
     }, []);
 
-    // Fallback data if API returns empty (so the site doesn't look broken during setup)
+    // Fallback data if API returns empty
     const displayItems = items.length > 0 ? items : [
-        { id: '1', period: 'Phase 1', role: 'Product Designer', description: 'User Experience & UI Design (5 Years)' },
-        { id: '2', period: 'Phase 2', role: 'Content Creator', description: 'Design & AI Knowledge Sharing' },
-        { id: '3', period: 'Phase 3', role: 'Lecturer', description: 'Offline/Online Teaching' },
-        { id: '4', period: 'Phase 4', role: 'Team Lead', description: 'Education Ops & System Building' },
-        { id: '5', period: 'Current', role: 'AI Solopreneur', description: 'Building profitable AI Products' },
+        { id: '1', period: 'Phase 1', role: 'Product Designer', title: 'Product Designer', description: 'User Experience & UI Design (5 Years)', category: 'Design' },
+        { id: '2', period: 'Phase 2', role: 'Content Creator', title: 'Content Creator', description: 'Design & AI Knowledge Sharing', category: 'Content' },
+        { id: '3', period: 'Phase 3', role: 'Lecturer', title: 'Lecturer', description: 'Offline/Online Teaching', category: 'Education' },
+        { id: '4', period: 'Phase 4', role: 'Team Lead', title: 'Team Lead', description: 'Education Ops & System Building', category: 'Systems' },
+        { id: '5', period: 'Current', role: 'AI Solopreneur', title: 'AI Solopreneur', description: 'Building profitable AI Products', category: 'AI' },
     ];
 
     return (
