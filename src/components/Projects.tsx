@@ -52,7 +52,7 @@ export default function Projects() {
             <div className="container">
                 <div className="section-header">
                     <h2 className="section-title">Selected Works</h2>
-                    <p className="section-subtitle">노션 데이터베이스와 실시간으로 연동된 프로젝트입니다.</p>
+                    <p className="section-subtitle">디자인, 교육, 개발 등 다양한 전문성을 바탕으로 성과를 만들어낸 대표적인 작업물입니다.</p>
                 </div>
 
                 {error ? (
