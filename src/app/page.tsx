@@ -74,11 +74,11 @@ export default function Home() {
               </div>
               <div className="card capability-card">
                 <h3>Systems & Ops</h3>
-                <p>팀 리더로서의 HR 및 RnR 설계, 240억 매출 견인을 위한 교육팀 운영 및 AX(AI Transformation) 기반의 효율적인 워크플로우를 구축합니다.</p>
+                <p>대규모 부트캠프의 안정적인 매출 견인을 위한 교육팀 운영 및 AX(AI Transformation) 기반의 효율적인 워크플로우를 구축합니다.</p>
               </div>
               <div className="card capability-card">
                 <h3>AI & Community</h3>
-                <p>기획부터 개발까지 직접 수행하는 AI 빌더이자, 디자인 다오(Design DAO)를 통해 강력한 커뮤니티와 파트너십을 빌딩합니다.</p>
+                <p>기획부터 개발까지 직접 수행하는 AI 빌더이자, 사람과 사람을 연결하는 커뮤니티 빌더 입니니다.</p>
               </div>
             </div>
           </div>
