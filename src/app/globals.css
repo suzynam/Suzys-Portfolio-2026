@@ -922,7 +922,8 @@ p {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 32px;
   margin: 48px 0;
-  align-items: start;
+  align-items: start !important;
+  align-content: start !important;
 }
 
 .notion-column-list[data-columns="2"] {
@@ -934,15 +935,55 @@ p {
 }
 
 .notion-column {
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
   gap: 16px;
+  justify-content: flex-start !important;
+  align-items: stretch !important;
 }
 
 .notion-column img {
   margin: 0 !important;
-  width: 100%;
+  width: 100% !important;
+  height: auto !important;
+  max-height: 100%;
+  object-fit: contain;
   border-radius: 8px;
+}
+
+/* Aggressively remove top spacing from first elements in columns */
+.notion-column>*:first-child,
+.notion-column>.notion-block:first-child,
+.notion-column>.notion-asset-wrapper:first-child,
+.notion-column>figure:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Reset figure margins */
+.notion-column figure {
+  margin: 0 !important;
+}
+
+.notion-column .notion-asset-wrapper {
+  margin-top: 0 !important;
+  margin-bottom: 1rem !important;
+}
+
+/*
+   CRITICAL FIX: Override inline styles from react-notion-x
+   The library adds style="align-self: center" to the div wrapping the image.
+*/
+.notion-column .notion-asset-wrapper>div {
+  align-self: flex-start !important;
+  justify-content: flex-start !important;
+  height: auto !important;
+  /* Override fixed height like 800px */
+}
+
+/* Ensure top alignment for text content too */
+.notion-column>*:first-child {
+  margin-top: 0 !important;
 }
 
 /* Notion Tables */
