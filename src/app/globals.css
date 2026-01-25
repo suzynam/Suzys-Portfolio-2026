@@ -14,8 +14,9 @@
   --font-kr: 'Noto Sans KR', sans-serif;
 
   --container-width: 1200px;
-  --spacing-md: 2rem;
-  --spacing-lg: 5rem;
+  --spacing-md: 2.5rem;
+  --spacing-lg: 10rem;
+  /* Increased for the 160px-200px look in Figma */
 
   --transition-fast: 0.3s ease;
   --transition-smooth: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -342,14 +343,16 @@ p {
 /* Grid Layouts */
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  /* ~24px as estimated */
 }
 
 .card {
   background: var(--surface-color);
-  padding: 2rem;
+  padding: 2.5rem;
   border-radius: 1rem;
+  /* ~16px */
   border: 1px solid rgba(255, 255, 255, 0.05);
   transition: var(--transition-fast);
 }
