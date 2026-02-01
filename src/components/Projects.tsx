@@ -60,7 +60,7 @@ export default function Projects() {
                     <div className="error-card">
                         <h3>연결 오류</h3>
                         <p>{error}</p>
-                        <small>ID: 2f08db7b4141808ba8e6f44c4064ad7a</small>
+                        <small>Please check your Notion Integration settings.</small>
                     </div>
                 ) : projects.length === 0 ? (
                     <div className="empty-state">
