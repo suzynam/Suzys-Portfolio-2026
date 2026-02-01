@@ -1,4 +1,4 @@
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
     const apiKey = process.env.NOTION_API_KEY;
@@ -27,7 +27,7 @@ export async function GET() {
                     },
                 ],
             }),
-            next: { revalidate: 60 } // Cache results for 60 seconds
+            // next: { revalidate: 60 } // Cache removed to prevent expired signed URLs
         });
 
         if (!response.ok) {

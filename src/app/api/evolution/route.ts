@@ -17,7 +17,7 @@ export async function GET() {
             body: JSON.stringify({
                 sorts: [
                     {
-                        property: "Timeline",
+                        property: "Date",
                         direction: "descending"
                     }
                 ]
